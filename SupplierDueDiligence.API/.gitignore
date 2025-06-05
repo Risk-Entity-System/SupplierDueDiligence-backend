@@ -1,0 +1,57 @@
+# Build outputs
+bin/
+obj/
+
+# User-specific files
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Visual Studio files
+.vs/
+
+# Rider files
+.idea/
+
+# Logs
+*.log
+
+# NuGet packages
+*.nupkg
+*.snupkg
+packages/
+
+# ASP.NET temporary files
+*.dll
+*.exe
+*.cache
+*.config
+
+# Publish outputs
+publish/
+
+# IIS Express
+.iisexpress/
+
+# Resharper
+_ReSharper*/
+
+# DotCover
+*.dotCover
+
+# Azure Pipelines
+.azure-pipelines/
+
+# Coverage results
+*.coverage
+*.coveragexml
+
+# Others
+*.dbmdl
+*.pdb
+
+
+appsettings.Development.json
+appsettings.Local.json
+.env
