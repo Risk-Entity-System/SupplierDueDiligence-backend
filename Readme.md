@@ -109,7 +109,15 @@ cd risk-entity-scraper
 
 - Ensure it is running and reachable at the URL set in InternalApiUrl.
 
-### 4. Apply database migrations
+### 4. Install dependencies
+
+Restore all NuGet packages before running or building the project:
+
+```bash
+dotnet restore
+```
+
+### 5. Apply database migrations
 
 Make sure your database is accessible, then apply migrations:
 
@@ -117,7 +125,7 @@ Make sure your database is accessible, then apply migrations:
 dotnet ef database update
 ```
 
-### 5. Run the backend API
+### 6. Run the backend API
 
 Run the API locally:
 
