@@ -36,6 +36,24 @@ public class SupplierController(AppDbContext context) : ControllerBase
                 .Where(s => s.CountryId == query.CountryId.Value);
         }
 
+        if (!string.IsNullOrWhiteSpace(query.TaxId))
+        {
+            suppliersQuery = suppliersQuery
+                .Where(s => s.TaxId.Contains(query.TaxId));
+        }
+
+        if (query.LastUpdatedFrom.HasValue)
+        {
+            suppliersQuery = suppliersQuery
+                .Where(s => s.LastUpdated >= query.LastUpdatedFrom.Value);
+        }
+
+        if (query.LastUpdatedTo.HasValue)
+        {
+            suppliersQuery = suppliersQuery
+                .Where(s => s.LastUpdated <= query.LastUpdatedTo.Value);
+        }
+
         suppliersQuery = suppliersQuery
             .OrderByDescending(s => s.LastUpdated);
 
