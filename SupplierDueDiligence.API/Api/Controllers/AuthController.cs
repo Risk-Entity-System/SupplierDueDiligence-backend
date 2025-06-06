@@ -1,6 +1,10 @@
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using SupplierDueDiligence.API.Config.Exceptions;
+using SupplierDueDiligence.API.Config.Settings;
 using SupplierDueDiligence.API.Data;
 using SupplierDueDiligence.API.Domain.Models;
 using SupplierDueDiligence.API.Domain.Services;
@@ -17,19 +21,50 @@ public class AuthController(AppDbContext context, IJwtService jwtService) : Cont
     private readonly PasswordHasher<User> _hasher = new();
     private readonly IJwtService _jwtService = jwtService;
 
+    [HttpGet]
+    [Authorize]
+    public IActionResult Me()
+    {
+        var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier) ?? throw new UnauthorizedException("No user ID claim");
+
+        var userId = userIdClaim.Value;
+
+        var user = _context.Users
+            .Where(u => u.Id.ToString() == userId)
+            .Select(u => new UserDto { Username = u.Username, Email = u.Email })
+            .SingleOrDefault() ?? throw new UnauthorizedException("User not found or unauthorized.");
+
+        return Ok(ApiResponse<UserDto>.Success("User retrieved successfully", user));
+    }
 
     [HttpPost("login")]
     public IActionResult Login([FromBody] LoginUserDto dto)
     {
-        var errorMessage = "Email or password is incorrect.";
-        var user = _context.Users.SingleOrDefault(u => u.Email == dto.Email) ?? throw new UnauthorizedException(errorMessage, errorMessage);
+        var user = _context.Users.SingleOrDefault(u => u.Email == dto.Email) ?? throw new InvalidCredentialsException();
 
         var result = _hasher.VerifyHashedPassword(user, user.PasswordHash, dto.Password);
-        if (result == PasswordVerificationResult.Failed) throw new UnauthorizedException(errorMessage, errorMessage);
+        if (result == PasswordVerificationResult.Failed) throw new InvalidCredentialsException();
 
         var token = _jwtService.GenerateToken(user);
 
-        return Ok(ApiResponse<string>.Success("Login successful", token));
+        var cookieOptions = new CookieOptions
+        {
+            HttpOnly = true,
+            Secure = false, // TODO: SECURE HTTPS
+            SameSite = SameSiteMode.Strict,
+            Expires = DateTime.UtcNow.AddMinutes(_jwtService.ExpiresInMinutes)
+        };
+
+        Response.Cookies.Append(_jwtService.CookieKey, token, cookieOptions);
+
+        UserDto auth = new()
+        {
+            Username = user.Username,
+            Email = user.Email
+        };
+
+
+        return Ok(ApiResponse<UserDto>.Success("Login successful", auth));
     }
 
 

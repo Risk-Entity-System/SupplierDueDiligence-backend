@@ -14,9 +14,22 @@ using SupplierDueDiligence.API.Domain.Services;
 using SupplierDueDiligence.API.Infraestructure.Services;
 
 var builder = WebApplication.CreateBuilder(args);
+var allowFrontCorsPolicy = "AllowFrontCorsPolicy";
 
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(allowFrontCorsPolicy,
+        policy =>
+        {
+            policy.WithOrigins("http://localhost:5173/")
+                  .AllowAnyHeader()
+                  .AllowAnyMethod()
+                  .AllowCredentials();
+        });
+});
 
 builder.Services.AddControllers()
     .AddJsonOptions(options =>
@@ -39,18 +52,30 @@ builder.Services.Configure<JwtSettings>(jwtConfiguration);
 
 builder.Services.AddHttpClient();
 
-var jwtSettings = jwtConfiguration.Get<JwtSettings>();
+var jwtSettings = jwtConfiguration.Get<JwtSettings>()!;
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     {
+        options.Events = new JwtBearerEvents
+        {
+            OnMessageReceived = context =>
+            {
+                var token = context.Request.Cookies[jwtSettings.CookieKey];
+                if (!string.IsNullOrEmpty(token))
+                {
+                    context.Token = token;
+                }
+                return Task.CompletedTask;
+            }
+        };
         options.TokenValidationParameters = new TokenValidationParameters
         {
             ValidateIssuer = false,
             ValidateAudience = false,
             ValidateLifetime = true,
             ValidateIssuerSigningKey = true,
-            ValidIssuer = jwtSettings!.Issuer,
+            ValidIssuer = jwtSettings.Issuer,
             ValidAudience = jwtSettings.Audience,
             IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings.Key))
         };
@@ -69,6 +94,9 @@ using (var scope = app.Services.CreateScope())
 
 app.UseMiddleware<GlobalExceptionMiddleware>();
 app.UseHttpsRedirection();
+
+app.UseCors(allowFrontCorsPolicy);
+
 app.UseAuthentication();
 app.UseAuthorization();
 

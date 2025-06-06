@@ -31,7 +31,7 @@ public class ScreeningController(
     {
         var sources = await context.ScreeningSources
             .AsNoTracking()
-            .OrderBy(s => s.Name)
+            .OrderByDescending(s => s.Enable)
             .ToListAsync();
 
         var response = ApiResponse<List<ScreeningSource>>.Success("Screening sources retrieved successfully.", sources);

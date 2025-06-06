@@ -83,7 +83,6 @@ public class SupplierController(AppDbContext context) : ControllerBase
         return Ok(response);
     }
 
-
     [HttpPost]
     public async Task<IActionResult> CreateSupplier([FromBody] SupplierDto dto)
     {

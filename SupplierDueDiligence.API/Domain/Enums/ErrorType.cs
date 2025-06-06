@@ -2,6 +2,7 @@ namespace SupplierDueDiligence.API.Domain.Enums;
 
 public enum ErrorType
 {
+    INVALID_CREDENTIALS,
     CONFLICT,
     METHOD_NOT_ALLOWED,
     VALIDATION,

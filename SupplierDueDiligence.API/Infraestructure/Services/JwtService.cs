@@ -14,6 +14,10 @@ public class JwtService(IOptions<JwtSettings> jwtSettings) : IJwtService
 {
     private readonly JwtSettings _settings = jwtSettings.Value;
 
+    public string CookieKey => _settings.CookieKey;
+
+    public int ExpiresInMinutes => _settings.ExpiresInMinutes;
+
     public string GenerateToken(User user)
     {
         var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_settings.Key));

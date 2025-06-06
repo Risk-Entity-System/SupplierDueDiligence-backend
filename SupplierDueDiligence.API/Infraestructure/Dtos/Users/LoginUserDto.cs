@@ -1,5 +1,3 @@
-using System;
-
 namespace SupplierDueDiligence.API.Infraestructure.Dtos.Users;
 
 public class LoginUserDto

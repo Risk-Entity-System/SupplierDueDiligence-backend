@@ -338,9 +338,9 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
         );
 
         modelBuilder.Entity<ScreeningSource>().HasData(
-               new ScreeningSource { Id = 1, Name = "OFAC", Code = ScreeningSourceCode.OFAC },
-               new ScreeningSource { Id = 2, Name = "World Bank", Code = ScreeningSourceCode.WORLD_BANK },
-               new ScreeningSource { Id = 3, Name = "Offshore Leaks", Code = ScreeningSourceCode.OFFSHORE_LEAKS }
+               new ScreeningSource { Id = 1, Name = "OFAC", Code = ScreeningSourceCode.OFAC, Enable = true },
+               new ScreeningSource { Id = 2, Name = "World Bank", Code = ScreeningSourceCode.WORLD_BANK, Enable = true },
+               new ScreeningSource { Id = 3, Name = "Offshore Leaks", Code = ScreeningSourceCode.OFFSHORE_LEAKS, Enable = false }
            );
 
         modelBuilder.Entity<User>().HasData(
