@@ -19,12 +19,15 @@ var allowFrontCorsPolicy = "AllowFrontCorsPolicy";
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
+
+var allowedOrigins = builder.Configuration.GetSection("Settings:Cors:AllowedOrigins").Get<string[]>()!;
+
 builder.Services.AddCors(options =>
 {
     options.AddPolicy(allowFrontCorsPolicy,
         policy =>
         {
-            policy.WithOrigins("http://localhost:5173")
+            policy.WithOrigins(allowedOrigins)
                   .AllowAnyHeader()
                   .AllowAnyMethod()
                   .AllowCredentials();

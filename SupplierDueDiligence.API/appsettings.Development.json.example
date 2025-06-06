@@ -1,0 +1,27 @@
+{
+  "Logging": {
+    "LogLevel": {
+      "Default": "Information",
+      "Microsoft.AspNetCore": "Warning"
+    }
+  },
+  "Cors": {
+    "AllowedOrigins": ["http://localhost:5173"]
+  },
+  "ConnectionStrings": {
+    "DefaultConnection": ""
+  },
+  "Settings": {
+    "Internal": {
+      "InternalSecretKey": "",
+      "InternalApiUrl": "http://localhost:3000/internal"
+    },
+    "Jwt": {
+      "CookieKey": "jwt_token",
+      "Key": "",
+      "Issuer": "https://localhost:5001",
+      "Audience": "https://localhost:3000",
+      "ExpiresInMinutes": 60
+    }
+  }
+}
