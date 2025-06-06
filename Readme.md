@@ -86,8 +86,7 @@ Or edit appsettings.Development.json to update values like:
     "Internal": {
       "InternalSecretKey": "your_internal_secret_key",
       "InternalApiUrl": "http://localhost:3000/internal"
-    },
-    "ChromeExecutablePath": "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe"
+    }
   }
 }
 ```
@@ -160,7 +159,3 @@ By default, the API will listen on the port specified in your configuration.
 - Entity Framework Core with SQL Server
 
 - JWT Authentication
-
-- Internal HTTP client communication between microservices
-
-- Google Chrome headless for scraping
