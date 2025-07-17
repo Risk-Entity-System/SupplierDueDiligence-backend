@@ -27,8 +27,7 @@ builder.Services.AddCors(options =>
     options.AddPolicy(allowFrontCorsPolicy,
         policy =>
         {
-            policy
-                    .SetIsOriginAllowed(_ => true)
+            policy.WithOrigins(allowedOrigins)
                   .AllowAnyHeader()
                   .AllowAnyMethod()
                   .AllowCredentials();
