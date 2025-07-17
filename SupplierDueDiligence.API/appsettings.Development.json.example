@@ -19,8 +19,8 @@
     "Jwt": {
       "CookieKey": "jwt_token",
       "Key": "",
-      "Issuer": "https://localhost:5001",
-      "Audience": "https://localhost:3000",
+      "Issuer": "",
+      "Audience": "",
       "ExpiresInMinutes": 60
     }
   }
