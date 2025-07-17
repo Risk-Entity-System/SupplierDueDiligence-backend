@@ -6,6 +6,6 @@ public class JwtSettings
     public required string Issuer { get; init; }
     public required string Audience { get; init; }
     public required string CookieKey { get; init; }
-    public int ExpiresInMinutes { get; init; }
+    public required int ExpiresInMinutes { get; init; }
 
 }

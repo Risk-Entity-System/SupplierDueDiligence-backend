@@ -51,6 +51,7 @@ _ReSharper*/
 *.dbmdl
 *.pdb
 
+publish/
 
 appsettings.Development.json
 appsettings.Local.json

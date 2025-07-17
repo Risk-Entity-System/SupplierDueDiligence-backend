@@ -1,0 +1,39 @@
+version: "3.8"
+
+services:
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server:2022-CU20-ubuntu-22.04
+    container_name: sqlserver
+    environment:
+      ACCEPT_EULA: "Y"
+      MSSQL_SA_PASSWORD: "MyS3cretPass123!"
+      MSSQL_PID: "Developer"
+    ports:
+      - "1433:1433"
+    networks:
+      - backend-network
+
+  supplier-backend:
+    build:
+      context: .
+      dockerfile: SupplierDueDiligence.API/Dockerfile
+    depends_on:
+      - sqlserver
+    environment:
+      ASPNETCORE_URLS: "http://+:5000"
+      ConnectionStrings__DefaultConnection: "Server=sqlserver;Database=SupplierDueDiligence;User=sa;Password=MyS3cretPass123!;TrustServerCertificate=True"
+      Settings__Jwt__Key: "bTTo68F6z0sZFjd45h6Dzdp0oxCYjHMH7B6q1mQeWXsEpGT6rvcDcgSMxARTxqep"
+      Settings__Jwt__Issuer: "https://localhost:5001"
+      Settings__Jwt__Audience: "https://localhost:3000"
+      Settings__Jwt__CookieKey: "jwt_token"
+      Settings__Internal__InternalSecretKey: "acpSAdxylImPlchz6yQt4lX1aycAdudIgh5Otjb8ls4BRxb2r67CwChZqK9lefqk"
+      Settings__Internal__InternalApiUrl: "http://scraper-service:3000/internal"
+      Settings__Cors__AllowedOrigins__0: "http://localhost:5173"
+    ports:
+      - "5000:5000"
+    networks:
+      - backend-network
+
+networks:
+  backend-network:
+    driver: bridge

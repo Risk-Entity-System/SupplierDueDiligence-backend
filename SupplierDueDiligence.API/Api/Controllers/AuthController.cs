@@ -50,7 +50,7 @@ public class AuthController(AppDbContext context, IJwtService jwtService) : Cont
         var cookieOptions = new CookieOptions
         {
             HttpOnly = true,
-            Secure = false, // TODO: SECURE HTTPS
+            Secure = true,
             SameSite = SameSiteMode.Strict,
             Expires = DateTime.UtcNow.AddMinutes(_jwtService.ExpiresInMinutes)
         };
