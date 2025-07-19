@@ -14,36 +14,39 @@ jobs:
       IMAGE_TAG: latest
 
     steps:
-      - name: Checkout repo
-        uses: actions/checkout@v3
+      - name: Placeholder - Pipeline defined for future container deployment
+        run: echo "This workflow is defined for future containerized API build and deployment (AWS ECR). Steps are temporarily disabled."
 
-      - name: Setup .NET SDK
-        uses: actions/setup-dotnet@v4
-        with:
-          dotnet-version: 9.0.x
+      # - name: Checkout repo
+      #   uses: actions/checkout@v3
 
-      - name: Restore dependencies
-        run: dotnet restore SupplierDueDiligence.API/SupplierDueDiligence.API.csproj
+      # - name: Setup .NET SDK
+      #   uses: actions/setup-dotnet@v4
+      #   with:
+      #     dotnet-version: 9.0.x
 
-      - name: Build
-        run: dotnet build SupplierDueDiligence.API/SupplierDueDiligence.API.csproj --configuration Release --no-restore
+      # - name: Restore dependencies
+      #   run: dotnet restore SupplierDueDiligence.API/SupplierDueDiligence.API.csproj
 
-      - name: Publish
-        run: dotnet publish SupplierDueDiligence.API/SupplierDueDiligence.API.csproj --configuration Release --output SupplierDueDiligence.API/publish --no-build
+      # - name: Build
+      #   run: dotnet build SupplierDueDiligence.API/SupplierDueDiligence.API.csproj --configuration Release --no-restore
 
-      - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v2
-        with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: ${{ env.AWS_REGION }}
+      # - name: Publish
+      #   run: dotnet publish SupplierDueDiligence.API/SupplierDueDiligence.API.csproj --configuration Release --output SupplierDueDiligence.API/publish --no-build
 
-      - name: Login to Amazon ECR
-        id: login-ecr
-        uses: aws-actions/amazon-ecr-login@v2
+      # - name: Configure AWS credentials
+      #   uses: aws-actions/configure-aws-credentials@v2
+      #   with:
+      #     aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      #     aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      #     aws-region: ${{ env.AWS_REGION }}
 
-      - name: Build, tag and push Docker image to ECR
-        run: |
-          IMAGE_URI=${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_REPOSITORY }}:${{ env.IMAGE_TAG }}
-          docker build -t $IMAGE_URI -f SupplierDueDiligence.API/Dockerfile SupplierDueDiligence.API
-          docker push $IMAGE_URI
+      # - name: Login to Amazon ECR
+      #   id: login-ecr
+      #   uses: aws-actions/amazon-ecr-login@v2
+
+      # - name: Build, tag and push Docker image to ECR
+      #   run: |
+      #     IMAGE_URI=${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_REPOSITORY }}:${{ env.IMAGE_TAG }}
+      #     docker build -t $IMAGE_URI -f SupplierDueDiligence.API/Dockerfile SupplierDueDiligence.API
+      #     docker push $IMAGE_URI
